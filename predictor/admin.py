@@ -2,4 +2,4 @@ from django.contrib import admin
 from .models import DiabetesData
 
 # Register your models here.
-admin.register(DiabetesData)
+admin.site.register(DiabetesData)

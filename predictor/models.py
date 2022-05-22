@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class DiabetesData(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=256,default="")
     pregnancies = models.CharField(max_length=256, default="")
     glucose = models.CharField(max_length=256, default="")
@@ -14,7 +13,6 @@ class DiabetesData(models.Model):
     BMI = models.CharField(max_length=256, default="")
     DPF = models.CharField(max_length=256, default="")
     age = models.CharField(max_length=256, default="")
-    date = models.DateTimeField()
 
-    def __init__(self):
+    def __str__(self):
         return self.name
