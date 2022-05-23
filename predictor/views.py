@@ -86,8 +86,8 @@ def result_pdf(request,pk):
     pdf = canvas.Canvas(fileName)
     pdf.setTitle(documentTitle)
 
-    fileName = 'MyDoc.pdf'
-    documentTitle = 'Document title!'
+    fileName = 'Diabetes_retinopathy_results.pdf'
+    documentTitle = 'Diabetes retinopathy'
     title = 'Diabetic retinopathy report'
     symptoms_title = 'Diabetes retinopathy symptoms'
 
@@ -98,6 +98,26 @@ def result_pdf(request,pk):
     'Dark or empty areas in your vision.',
     'Vision loss.'
     ]
+
+    pegnancies = 'pregnancies :'
+    glucose = 'glucose :'
+    blood_pressure = 'blood pressure :'
+    skin_thickness = 'skin thickness :'
+    insulin = 'insulin :'
+    BMI = 'bmi :'
+    DPF = 'Diabetes Pedigree function :'
+    age = 'age :'
+    
+    patient_data = DiabetesData.objects.get(pk=pk)
+    
+    preg_data = patient_data.pregnancies
+    glucose_data = patient_data.glucose
+    blood_pressure = patient_data.blood_pressure
+    skin_thickness = patient_data.skin_thickness
+    insulin = patient_data.insulin
+    BMI = patient_data.BMI
+    DPF = patient_data.DPF
+    age = patient_data.age
 
 
     drawMyRuler(pdf)
