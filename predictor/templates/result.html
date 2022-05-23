@@ -3,5 +3,7 @@
     <div class="container">
         <h1>result:</h1>
         <h3>{{result}}</h3>
+        <a href="{% url 'result_pdf' values.pk %}">Generate pdf</a>
     </div>
+    
 {% endblock content %}

@@ -7,5 +7,5 @@ urlpatterns = [
   
     path('home/', predictor, name="home"),
     path('result/<int:pk>',result, name="result"),
-    path('result_pdf',result_pdf, name="resultpdf")
+    path('result_pdf/<int:pk>',result_pdf, name="result_pdf")
 ]
