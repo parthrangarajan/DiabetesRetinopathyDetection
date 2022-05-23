@@ -8,6 +8,16 @@ from sklearn.metrics import accuracy_score
 from django.views.generic import  CreateView
 from .forms import PredictionForm
 from .models import *
+import csv
+from django.http import FileResponse
+import io
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import inch
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.pdfbase import pdfmetrics
+from reportlab.lib import colors
+
 
 
 
@@ -54,4 +64,58 @@ def result(request,pk):
     else:
         result="NEGATIVE"
 
-    return render(request, 'result.html', {'result':result}) 
+    return render(request, 'result.html', {'result':result},{'pk':pk}) 
+
+def drawMyRuler(pdf):
+    pdf.drawString(100,810, 'x100')
+    pdf.drawString(200,810, 'x200')
+    pdf.drawString(300,810, 'x300')
+    pdf.drawString(400,810, 'x400')
+    pdf.drawString(500,810, 'x500')
+
+    pdf.drawString(10,100, 'y100')
+    pdf.drawString(10,200, 'y200')
+    pdf.drawString(10,300, 'y300')
+    pdf.drawString(10,400, 'y400')
+    pdf.drawString(10,500, 'y500')
+    pdf.drawString(10,600, 'y600')
+    pdf.drawString(10,700, 'y700')
+    pdf.drawString(10,800, 'y800')
+
+def result_pdf(request,pk):  
+    pdf = canvas.Canvas(fileName)
+    pdf.setTitle(documentTitle)
+
+    fileName = 'MyDoc.pdf'
+    documentTitle = 'Document title!'
+    title = 'Diabetic retinopathy report'
+    symptoms_title = 'Diabetes retinopathy symptoms'
+
+    symptoms = [
+    'Spots or dark strings floating in your vision (floaters)',
+    'Blurred vision.',
+    'Fluctuating vision.',
+    'Dark or empty areas in your vision.',
+    'Vision loss.'
+    ]
+
+
+    drawMyRuler(pdf)
+    pdfmetrics.registerFont(TTFont('abc', 'SakBunderan.ttf'))
+    pdf.setFont('abc', 36)
+    pdf.drawCentredString(300, 770, title)
+
+    pdf.setFillColorRGB(0, 0, 255)
+    pdf.setFont("Courier-Bold", 24)
+    pdf.drawCentredString(290,720, symptoms_title)
+    pdf.line(30, 710, 550, 710)
+
+    text = pdf.beginText(40, 680)
+    text.setFont("Courier", 18)
+    text.setFillColor(colors.red)
+    for line in symptoms:
+        text.textLine(line)
+
+    pdf.drawText(text)
+
+    pdf.save()
