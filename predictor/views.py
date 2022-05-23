@@ -112,30 +112,57 @@ def result_pdf(request,pk):
     
     preg_data = patient_data.pregnancies
     glucose_data = patient_data.glucose
-    blood_pressure = patient_data.blood_pressure
-    skin_thickness = patient_data.skin_thickness
-    insulin = patient_data.insulin
-    BMI = patient_data.BMI
-    DPF = patient_data.DPF
-    age = patient_data.age
+    bp_data = patient_data.blood_pressure
+    st_data = patient_data.skin_thickness
+    insulin_data = patient_data.insulin
+    BMI_data = patient_data.BMI
+    DPF_data = patient_data.DPF
+    age_data = patient_data.age
+
+
 
 
     drawMyRuler(pdf)
-    pdfmetrics.registerFont(TTFont('abc', 'SakBunderan.ttf'))
-    pdf.setFont('abc', 36)
+
+    pdf.setFont('Courier-Bold', 36)
     pdf.drawCentredString(300, 770, title)
 
-    pdf.setFillColorRGB(0, 0, 255)
+    pdf.setFillColorRGB(255, 0, 0)
     pdf.setFont("Courier-Bold", 24)
     pdf.drawCentredString(290,720, symptoms_title)
     pdf.line(30, 710, 550, 710)
 
     text = pdf.beginText(40, 680)
-    text.setFont("Courier", 18)
-    text.setFillColor(colors.red)
+    text.setFont("Courier", 12)
+    text.setFillColor(colors.blue)
     for line in symptoms:
         text.textLine(line)
-
     pdf.drawText(text)
+    pdf.line(30, 500, 550, 500)
+
+    pdf.drawText(10,480)
+    pdf.drawText(10,460)
+    pdf.drawText(10,440)
+    pdf.drawText(10,420)
+    pdf.drawText(10,400)
+    pdf.drawText(10,380)
+    pdf.drawText(10,360)
+    pdf.drawText(10,340)
+
+    pdf.drawText(490,480)
+    pdf.drawText(490,460)
+    pdf.drawText(490,440)
+    pdf.drawText(490,420)
+    pdf.drawText(490,400)
+    pdf.drawText(490,380)
+    pdf.drawText(490,360)
+    pdf.drawText(490,340)
+
+
+
+
+
+
+
 
     pdf.save()

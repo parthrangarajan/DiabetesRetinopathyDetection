@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
-from .views import predictor,result
+from .views import predictor,result, result_pdf
 
 
 urlpatterns = [
