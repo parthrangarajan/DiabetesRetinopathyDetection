@@ -13,6 +13,7 @@ class DiabetesData(models.Model):
     BMI = models.CharField(max_length=256, default="")
     DPF = models.CharField(max_length=256, default="")
     age = models.CharField(max_length=256, default="")
+    result=models.CharField(max_length=256,default="NEGATIVE")
 
     def __str__(self):
         return self.name

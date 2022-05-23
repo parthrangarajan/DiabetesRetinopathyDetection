@@ -65,6 +65,9 @@ def result(request,pk):
     else:
         result="NEGATIVE"
 
+    # result_value = DiabetesData(pk=pk, result=result)
+    # result_value.save()
+
     return render(request, 'result.html', {'result':result,'values':values}) 
 
 def drawMyRuler(pdf):
@@ -100,6 +103,11 @@ def result_pdf(request,pk):
     'Vision loss.'
     ]
 
+    disclaimer = ["* Please don't treat this document as your final diagnosis report.", 
+    "Please consult your nearest ophthalmologist before getting any further treatment *"]
+
+    diagnosis_title='Your diagnosis'
+
     pegnancies = 'pregnancies :'
     glucose = 'glucose :'
     blood_pressure = 'blood pressure :'
@@ -108,6 +116,7 @@ def result_pdf(request,pk):
     BMI = 'bmi :'
     DPF = 'Diabetes Pedigree function :'
     age = 'age :'
+    result = 'result :'
     
     patient_data = DiabetesData.objects.get(pk=pk)
     
@@ -119,33 +128,44 @@ def result_pdf(request,pk):
     BMI_data = patient_data.BMI
     DPF_data = patient_data.DPF
     age_data = patient_data.age
+    result_data = 'POSITIVE'
 
-    drawMyRuler(pdf)
+    drawMyRuler(pdf)g
 
-    pdf.setFont('Courier-Bold', 36)
-    pdf.drawCentredString(300, 770, title)
+    pdf.setFont('Courier-Bold', 30)
+    pdf.drawCentredString(300, 720, title)
+    pdf.line(30, 700, 550, 700)
+    
+    pdf.setFillColorRGB(255, 0, 0)
+    pdf.setFont("Courier-Bold", 16)
+    title_text = pdf.beginText(40,660)
+    title_text.textLine(symptoms_title)
+    pdf.drawText(title_text)
 
     pdf.setFillColorRGB(255, 0, 0)
-    pdf.setFont("Courier-Bold", 24)
-    pdf.drawCentredString(290,720, symptoms_title)
-    pdf.line(30, 710, 550, 710)
+    pdf.setFont("Courier-Bold", 16)
+    diagnosis_text = pdf.beginText(40,510)
+    diagnosis_text.textLine(diagnosis_title)
+    pdf.drawText(diagnosis_text)
+    pdf.line(30, 500, 550, 500)
 
-    text = pdf.beginText(40, 680)
+    text = pdf.beginText(40, 630)
     text.setFont("Courier", 12)
-    text.setFillColor(colors.blue)
+    text.setFillColor(colors.blue
     for line in symptoms:
         text.textLine(line)
     pdf.drawText(text)
-    pdf.line(30, 500, 550, 500)
 
-    text1 = pdf.beginText(10,480)
-    text2 = pdf.beginText(10,460)
-    text3 = pdf.beginText(10,440)
-    text4 = pdf.beginText(10,420)
-    text5 = pdf.beginText(10,400)
-    text6 = pdf.beginText(10,380)
-    text7 = pdf.beginText(10,360)
-    text8 = pdf.beginText(10,340)
+
+    text1 = pdf.beginText(50,480)
+    text2 = pdf.beginText(50,460)
+    text3 = pdf.beginText(50,440)
+    text4 = pdf.beginText(50,420)
+    text5 = pdf.beginText(50,400)
+    text6 = pdf.beginText(50,380)
+    text7 = pdf.beginText(50,360)
+    text8 = pdf.beginText(50,340)
+    text9 = pdf.beginText(50,300)
 
     text1.textLine(pegnancies)
     text2.textLine(glucose)
@@ -155,6 +175,7 @@ def result_pdf(request,pk):
     text6.textLine(BMI)
     text7.textLine(DPF)
     text8.textLine(age)
+    text9.textLine(result)
 
     v_text1 = pdf.beginText(490,480)
     v_text2 = pdf.beginText(490,460)
@@ -164,6 +185,7 @@ def result_pdf(request,pk):
     v_text6 = pdf.beginText(490,380)
     v_text7 = pdf.beginText(490,360)
     v_text8 = pdf.beginText(490,340)
+    v_text9 = pdf.beginText(490,300)
 
     v_text1.textLine(preg_data)
     v_text2.textLine(glucose_data)
@@ -173,7 +195,7 @@ def result_pdf(request,pk):
     v_text6.textLine(BMI_data)
     v_text7.textLine(DPF_data)
     v_text8.textLine(age_data)
-
+    v_text9.textLine(result_data)
 
 
     pdf.drawText(text1)
@@ -184,6 +206,7 @@ def result_pdf(request,pk):
     pdf.drawText(text6)
     pdf.drawText(text7)
     pdf.drawText(text8)
+    pdf.drawText(text9)
 
     pdf.drawText(v_text1)
     pdf.drawText(v_text2)
@@ -193,7 +216,16 @@ def result_pdf(request,pk):
     pdf.drawText(v_text6)
     pdf.drawText(v_text7)
     pdf.drawText(v_text8)
-    pdf.line(30, 300, 550, 300)
+    pdf.setFillColorRGB(255, 0, 0)
+    pdf.drawText(v_text9)   
+    pdf.line(30, 320, 550, 320)
+
+    text_disc = pdf.beginText(40, 250)
+    text_disc.setFont("Courier", 10)
+    text_disc.setFillColor(colors.blue)
+    for line in disclaimer:
+        text_disc.textLine(line)
+    pdf.drawText(text_disc)
 
 
     pdf.showPage()

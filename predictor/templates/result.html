@@ -1,9 +1,18 @@
 {% extends 'base.html' %}
 {% block content %}
     <div class="container">
-        <h1>result:</h1>
-        <h3>{{result}}</h3>
-        <a href="{% url 'result_pdf' values.pk %}">Generate pdf</a>
+        <h1>result: <span><h3>{{result}}</h3></span></h1>
+        <button onclick="generationFunc()" class="btn btn-outline-dark"><a href="{% url 'result_pdf' values.pk %}" style="text-decoration:none;color:black"> Generate pdf</a></button>
     </div>
+    
+    <div style="text-align:center" id="msg">
+
+    </div>
+    <script>
+        function generationFunc()
+        {
+            document.getElementById("msg").innerHTML="document is being downloaded"; 
+        }
+    </script>
     
 {% endblock content %}
