@@ -251,7 +251,11 @@ def suggestion():
     location_data = json.loads(location_data_one)
     longitude = str(location_data['lat'])
     latitude = str(location_data['lon'])
-
+    suggestions = requests.get('https://photon.komoot.io/api',params={'lat':latitude,'lon':longitude,'q':'hospital','limit':"2"})
+    suggestion_data = json.loads(suggestions.text)
+    data = suggestion_data['features']
+    print(data)
+    return data
     
 
 
