@@ -10,7 +10,7 @@ from django.views.generic import  CreateView
 from .forms import PredictionForm
 from .models import *
 import csv
-from django.http import FileResponse
+from django.http import FileResponse, QueryDict
 import io
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import inch
@@ -18,6 +18,8 @@ from reportlab.lib.pagesizes import letter
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase import pdfmetrics
 from reportlab.lib import colors
+import json
+import requests
 
 
 
@@ -62,13 +64,20 @@ def result(request,pk):
     result=""
     if pred == [1]:
         result = "POSITIVE"
+        data = suggestion()
+        return render(request, 'result.html',{'result':result,'values':values, 'data':data})
     else:
         result="NEGATIVE"
+        return render(request, 'result.html', {'result':result,'values':values}) 
+        
+
+
+    
 
     # result_value = DiabetesData(pk=pk, result=result)
     # result_value.save()
 
-    return render(request, 'result.html', {'result':result,'values':values}) 
+    
 
 def drawMyRuler(pdf):
     pdf.drawString(100,810, 'x100')
@@ -130,7 +139,7 @@ def result_pdf(request,pk):
     age_data = patient_data.age
     result_data = 'POSITIVE'
 
-    drawMyRuler(pdf)g
+    drawMyRuler(pdf)
 
     pdf.setFont('Courier-Bold', 30)
     pdf.drawCentredString(300, 720, title)
@@ -151,7 +160,7 @@ def result_pdf(request,pk):
 
     text = pdf.beginText(40, 630)
     text.setFont("Courier", 12)
-    text.setFillColor(colors.blue
+    text.setFillColor(colors.blue)
     for line in symptoms:
         text.textLine(line)
     pdf.drawText(text)
@@ -233,5 +242,19 @@ def result_pdf(request,pk):
     buf.seek(0)
 
     return FileResponse(buf, as_attachment=True, filename=fileName)
+
+def suggestion():
+    ip = requests.get('http://api.ipify.org?format=json')
+    ip_data = json.loads(ip.text)
+    res = requests.get('http://ip-api.com/json/'+ip_data["ip"])
+    location_data_one = res.text
+    location_data = json.loads(location_data_one)
+    longitude = str(location_data['lat'])
+    latitude = str(location_data['lon'])
+
     
+
+
+
+
     
